@@ -1,0 +1,21 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+      routes:
+        - id: node
+          uri: http://localhost:3000
+          predicates:
+          - Path=/node/**
+        - id: node-ws
+          uri: ws://localhost:3001
+          predicates:
+            - Path=/node/ws/**
+          filters:
+            - RewritePath=/ws(?<segment>/?.*), $\{segment}
+  application:
+    name: spring-cloud-gateway
