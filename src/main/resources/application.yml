@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: spring-cloud-gateway
   cloud:
     gateway:
       globalcors:
@@ -7,15 +9,29 @@ spring:
             allowedOrigins: "*"
             allowedMethods: "*"
       routes:
-        - id: node
-          uri: http://localhost:3000
-          predicates:
-          - Path=/node/**
         - id: node-ws
           uri: ws://localhost:3001
           predicates:
-            - Path=/node/ws/**
+            - Path=/node/ws/
           filters:
-            - RewritePath=/ws(?<segment>/?.*), $\{segment}
-  application:
-    name: spring-cloud-gateway
+            - RewritePath=/node/ws(?<segment>/?.*), $\{segment}
+        - id: node
+          uri: http://localhost:3000
+          predicates:
+            - Path=/node/**
+          filters:
+            - RewritePath=/node(?<segment>/?.*), $\{segment}
+        - id: python-ws
+          uri: ws://localhost:5001
+          predicates:
+            - Path=/python/ws/
+          filters:
+            - RewritePath=/python/ws(?<segment>/?.*), $\{segment}
+        - id: python
+          uri: http://localhost:5000
+          predicates:
+            - Path=/python/**
+          filters:
+            - RewritePath=/python(?<segment>/?.*), $\{segment}
+
+
